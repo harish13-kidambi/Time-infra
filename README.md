@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ### Loops
 
 Loops are required when you want to create a resource multiple times based on a limit. We have 2 types of loops in terraform. Usually we iterate over a list or map and create the resources.
@@ -30,3 +31,6 @@ We can use outputs block in module development. Module users can catch the outpu
 ### Data sources
 
 Data sources in terraform are used to query the existing resource details or query the information provided by any provider.
+=======
+
+>>>>>>> b9a44636dbd1239a1a74ff20d077b701d1b367c2

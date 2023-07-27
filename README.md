@@ -16,7 +16,7 @@ locals{
 ```
 ```
 resource "aws_instance" "your-wish" {
-    ami = "ami-012b9156f755804f5"
+    ami = "ami-072ec8f4ea4a6f2cf"
     instance_type = local.instance_type
 }
 ```

@@ -36,7 +36,7 @@ resource "aws_vpc" "vpc"{
     # }
 }
 
-resource "aws_subnet" "Public_subnet" {
+resource "aws_subnet" "Public" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.1.0/24"
 
@@ -54,7 +54,7 @@ resource "aws_subnet" "Public_subnet" {
   # }
 }
 
-resource "aws_route_table" "public_rt" {
+resource "aws_route_table" "public" {
     vpc_id = aws_vpc.vpc.id
 
     route {
@@ -79,15 +79,15 @@ resource "aws_route_table" "public_rt" {
 }
 
 resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.Public_subnet.id
-  route_table_id = aws_route_table.public_rt.id
+  subnet_id      = aws_subnet.Public.id
+  route_table_id = aws_route_table.public.id
 }
 
 
 
 
 
-resource "aws_subnet" "Private_subnet" {
+resource "aws_subnet" "Private" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.11.0/24"
 
@@ -107,7 +107,7 @@ resource "aws_subnet" "Private_subnet" {
   # }
 }
 
-resource "aws_route_table" "private_rt" {
+resource "aws_route_table" "private" {
     vpc_id = aws_vpc.vpc.id
 
     tags = merge(
@@ -127,13 +127,13 @@ resource "aws_route_table" "private_rt" {
 }
 
 resource "aws_route_table_association" "private" {
-  subnet_id      = aws_subnet.Private_subnet.id
-  route_table_id = aws_route_table.private_rt.id
+  subnet_id      = aws_subnet.Private.id
+  route_table_id = aws_route_table.private.id
 }
 
 
 
-resource "aws_subnet" "database_subnet" {
+resource "aws_subnet" "database" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.13.0/24"
 
@@ -152,7 +152,7 @@ resource "aws_subnet" "database_subnet" {
  # }
 }
 
-resource "aws_route_table" "database_rt" {
+resource "aws_route_table" "database" {
     vpc_id = aws_vpc.vpc.id
 
 
@@ -173,8 +173,8 @@ resource "aws_route_table" "database_rt" {
 }
 
 resource "aws_route_table_association" "database" {
-  subnet_id      = aws_subnet.database_subnet.id
-  route_table_id = aws_route_table.database_rt.id
+  subnet_id      = aws_subnet.database.id
+  route_table_id = aws_route_table.database.id
 }
 
 
@@ -185,7 +185,7 @@ resource "aws_eip" "eip_nat" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.eip_nat.id
-  subnet_id     = aws_subnet.Public_subnet.id
+  subnet_id     = aws_subnet.Public.id
 
   tags = merge(
       var.tags,
@@ -203,7 +203,7 @@ resource "aws_nat_gateway" "nat" {
 
 
 resource "aws_route" "private" {
-  route_table_id            = aws_route_table.private_rt.id
+  route_table_id            = aws_route_table.private.id
   destination_cidr_block    = "0.0.0.0/0"
  nat_gateway_id = aws_nat_gateway.nat.id
  # depends_on                = [aws_route_table.private_rt]
@@ -211,7 +211,7 @@ resource "aws_route" "private" {
 
 
 resource "aws_route" "database" {
-  route_table_id            = aws_route_table.database_rt.id
+  route_table_id            = aws_route_table.database.id
   destination_cidr_block    = "0.0.0.0/0"
  nat_gateway_id = aws_nat_gateway.nat.id
  # depends_on                = [aws_route_table.database_rt]
